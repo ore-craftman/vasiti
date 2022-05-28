@@ -1,86 +1,84 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
+import { Featured } from '../components/Featured'
+import { Testimonials } from '../components/Testimonials'
 
-const Home: NextPage = () => {
+const Home: NextPage = ({ data }: any) => {
+  const { testimonials } = data
+
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center py-2">
+    <>
       <Head>
-        <title>Create Next App</title>
+        <title>Testimonial | Experiency The Better Way To Shop</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
-        <h1 className="text-6xl font-bold">
-          Welcome to{' '}
-          <a className="text-blue-600" href="https://nextjs.org">
-            Next.js!
-          </a>
-        </h1>
-
-        <p className="mt-3 text-2xl">
-          Get started by editing{' '}
-          <code className="rounded-md bg-gray-100 p-3 font-mono text-lg">
-            pages/index.tsx
-          </code>
-        </p>
-
-        <div className="mt-6 flex max-w-4xl flex-wrap items-center justify-around sm:w-full">
-          <a
-            href="https://nextjs.org/docs"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Documentation &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Find in-depth information about Next.js features and its API.
+      <main>
+        <section className="container mx-auto mt-4 block items-center justify-between px-5 pt-4 md:flex md:px-12">
+          <div className="w-full md:w-6/12">
+            <h1 className="mb-4 text-2xl font-bold text-gray-900 lg:text-6xl">
+              Amazing <br /> Experiences from Our Wonderful Customers
+            </h1>
+            <p className="text-slate-500">
+              Here is what customers and vendors are saying about us, you can
+              share your stories with us too.
             </p>
-          </a>
+          </div>
 
-          <a
-            href="https://nextjs.org/learn"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Learn &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Learn about Next.js in an interactive course with quizzes!
-            </p>
-          </a>
+          <div className="grow self-end">
+            <Image
+              alt="about vasiti"
+              src="/hero.svg"
+              width="600px"
+              height="450px"
+            />
+          </div>
+        </section>
 
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Examples &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Discover and deploy boilerplate example Next.js projects.
-            </p>
-          </a>
+        <Featured
+          title="Tolu & Joy’s Experience"
+          imgUrl="/tolu.png"
+          type="customer"
+          desc="I had the best experience shopping with vasiti. Usability of the
+                website was great, very good customer service, an all round
+                great experience. I would definately be coming back! I had the
+                best experience shopping with vasiti. Usability of the website
+                was great, very good customer service, an all round great
+                experience. I would definately be coming back!"
+        />
 
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Deploy &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
+        {testimonials && (
+          <Testimonials data={testimonials.slice(0, 6)} displayCity={true} />
+        )}
+
+        <Featured
+          title="Josiah’s Experience"
+          imgUrl="/josiah.png"
+          type="vendor"
+          reverse={true}
+          desc="I had the best experience shopping with vasiti. Usability of the
+                website was great, very good customer service, an all round
+                great experience. I would definately be coming back! I had the
+                best experience shopping with vasiti. Usability of the website
+                was great, very good customer service, an all round great
+                experience. I would definately be coming back!"
+        />
+
+        {testimonials && (
+          <Testimonials data={testimonials.slice(6, 12)} displayCity={false} />
+        )}
       </main>
-
-      <footer className="flex h-24 w-full items-center justify-center border-t">
-        <a
-          className="flex items-center justify-center gap-2"
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-        </a>
-      </footer>
-    </div>
+    </>
   )
+}
+
+export async function getServerSideProps() {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/testimonials`
+  )
+  const data = await res.json()
+  return { props: { data } }
 }
 
 export default Home
